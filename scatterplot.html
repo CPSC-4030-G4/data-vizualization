@@ -9,139 +9,179 @@
   <title>Data Visualization</title>
 </head>
 <body>
-  <h1>Data Visualization</h1>
+
+  <h3 id="chart-title"></h3>
+
   <div id="my_dataviz"></div>
+  <label>Choose the regions to compare:</label>
+    <button value="NAvJP" onclick="handleChange('NAvJP')" id="navjp">North America vs. Japan</button>
+    <button value="NAvEU" onclick="handleChange('NAvEU')" id="naveu">North America vs. Europe</button>
+    <button value="JPvEU"  onclick="handleChange('JPvEU')" id="jpveu">Japan vs. Europe</button>
   <script>
-        // set the dimensions and margins of the graph
-    const margin = {top: 40, right: 30, bottom: 30, left: 30},
-            width = 1500 - margin.left - margin.right,
-            height = 850 - margin.top - margin.bottom;
 
-    // append the svg object to the body of the page
-    const svg = d3.select("#my_dataviz")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    const handleChange = (selection) => {
+      selection = selection.trim()
+      document.getElementById("chart-title").innerHTML = "Comparing Sales By Region"
+      var div = d3.select("div");
+      div.selectAll("*").remove();
+          // set the dimensions and margins of the graph
+      const margin = {top: 40, right: 30, bottom: 30, left: 30},
+              width = 1500 - margin.left - margin.right,
+              height = 850 - margin.top - margin.bottom;
 
-    //Read the data
-    d3.csv("vgsales.csv").then(function(data) {
+      // append the svg object to the body of the page
+      const svg = d3.select("#my_dataviz")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-      svg.append("text")
-        .attr("x", width/2)
-        .attr("y", 0)
-        .attr("text-anchor", "middle")
-        .style("font-size", "32px")
-        .text("Comparing Sales By Region");
+      //Read the data
+      d3.csv("vgsales.csv").then(function(data) {
 
-      const color = d3.scaleOrdinal()
-                        .domain(["Sports", "Platform", "Racing", "Role-Playing", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy", "Misc", "Puzzle"])
-                        .range(["red", "blue", "yellow", "green", "orange", "purple", "pink", "gray", "brown", "lightgreen", "magenta", "cyan"])
+        const color = d3.scaleOrdinal()
+                          .domain(["Sports", "Platform", "Racing", "Role-Playing", "Shooter", "Simulation", "Action", "Fighting", "Adventure", "Strategy", "Misc", "Puzzle"])
+                          .range(["red", "blue", "yellow", "green", "orange", "purple", "pink", "gray", "brown", "lightgreen", "magenta", "cyan"])
 
-      // Handmade legend
-      svg.append("circle").attr("cx",width - 50).attr("cy", margin.top).attr("r", 5).style("fill", "red")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 15).attr("r", 5).style("fill", "blue")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 30).attr("r", 5).style("fill", "yellow")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 45).attr("r", 5).style("fill", "green")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 60).attr("r", 5).style("fill", "orange")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 75).attr("r", 5).style("fill", "purple")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 90).attr("r", 5).style("fill", "pink")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 105).attr("r", 5).style("fill", "gray")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 120).attr("r", 5).style("fill", "brown")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 135).attr("r", 5).style("fill", "lightgreen")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 150).attr("r", 5).style("fill", "magenta")
-      svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 165).attr("r", 5).style("fill", "cyan")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top).text("Sport").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 15).text("Platformer").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 30).text("Racing").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 45).text("RPG").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 60).text("Shooter").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 75).text("Simulation").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 90).text("Action").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 105).text("Fighting").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 120).text("Adventure").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 135).text("Strategy").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 150).text("Misc").style("font-size", "15px").attr("alignment-baseline","middle")
-      svg.append("text").attr("x", width - 40).attr("y", margin.top + 165).text("Puzzle").style("font-size", "15px").attr("alignment-baseline","middle")
+        // Handmade legend
+        svg.append("circle").attr("cx",width - 50).attr("cy", margin.top).attr("r", 5).style("fill", "red")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 15).attr("r", 5).style("fill", "blue")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 30).attr("r", 5).style("fill", "yellow")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 45).attr("r", 5).style("fill", "green")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 60).attr("r", 5).style("fill", "orange")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 75).attr("r", 5).style("fill", "purple")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 90).attr("r", 5).style("fill", "pink")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 105).attr("r", 5).style("fill", "gray")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 120).attr("r", 5).style("fill", "brown")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 135).attr("r", 5).style("fill", "lightgreen")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 150).attr("r", 5).style("fill", "magenta")
+        svg.append("circle").attr("cx",width - 50).attr("cy",margin.top + 165).attr("r", 5).style("fill", "cyan")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top).text("Sport").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 15).text("Platformer").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 30).text("Racing").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 45).text("RPG").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 60).text("Shooter").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 75).text("Simulation").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 90).text("Action").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 105).text("Fighting").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 120).text("Adventure").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 135).text("Strategy").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 150).text("Misc").style("font-size", "15px").attr("alignment-baseline","middle")
+        svg.append("text").attr("x", width - 40).attr("y", margin.top + 165).text("Puzzle").style("font-size", "15px").attr("alignment-baseline","middle")
 
-      // Add X axis
-      const x = d3.scaleLinear()
-                  .domain([0, d3.max(data, function(d) { return +d.NA_Sales; })])
-                  .range([ 0, width ]);
+        console.log(selection)
+        console.log(selection === "NAvsEU")
+        console.log(selection === "JPvsEU")
 
-      svg.append("g")
-          .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x));
+        if (selection === "NAvsEU") {
+          xRegion = "NA_Sales";
+          yRegion = "EU_Sales";
+        }
+        else if (selection === "JPvsEU") {
+          xRegion = "JP_Sales";
+          yRegion = "EU_Sales";
+        }
+        else {
+          xRegion = "NA_Sales";
+          yRegion = "JP_Sales";
+      }
 
-      svg.append("text")
-          .attr("class", "x label")
-          .attr("text-anchor", "end")
-          .attr("x", width / 2)
-          .attr("y", height + 30)
-          .text("NA Sales (Millions)");
+      console.log(xRegion)
+      console.log(yRegion)
 
-      // Add Y axis
-      const y = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) { return +d.JP_Sales; })])
-        .range([height, 0]);
-      svg.append("g")
-        .call(d3.axisLeft(y));
+        // Add X axis
+        const x = d3.scaleLinear()
+                    .domain([0, d3.max(data, function(d) { return +d[xRegion] })])
+                    .range([ 0, width ]);
 
-      svg.append("text")
-          .attr("class", "y label")
-          .attr("text-anchor", "end")
-          .attr("x", -(height) / 2)
-          .attr("y", -30)
-          .attr("dy", ".75em")
-          .attr("transform", "rotate(-90)")
-          .text("JP Sales (Millions)");
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
 
-      const tooltip = d3.select("#my_dataviz")
-        .append("div")
-        .style("position", "absolute")
-        .style("visibility", "hidden")
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
+        svg.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "end")
+            .attr("x", width / 2)
+            .attr("y", height + 30)
+            .text(function(d) {
+              if (selection === "JPvEU") {
+                  return "JP Sales (Millions)";
+                }
+                else {
+                  return "NA Sales (Millions)";
+                }
+            });
 
+        // Add Y axis
+        const y = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d) { return +d[yRegion] })])
+          .range([height, 0]);
 
-      // Add dots
-      svg.append('g')
-          .selectAll("dot")
-          .data(data)
-          .join("circle")
-          .attr("cx", function (d) { return x(+d.NA_Sales); } )
-          .attr("cy", function (d) { return y(+d.JP_Sales); } )
-          .attr("r", 5)
-          .style("fill", function (d) {return color(d.Genre)})
+        svg.append("g")
+          .call(d3.axisLeft(y));
+
+        svg.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "end")
+            .attr("x", -(height) / 2)
+            .attr("y", -30)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)")
+            .text(function(d) {
+              if (selection === "NAvJP") {
+                  return "JP Sales (Millions)";
+                }
+                else {
+                  return "EU Sales (Millions)";
+                }
+            });
+
+        const tooltip = d3.select("#my_dataviz")
+          .append("div")
+          .style("position", "absolute")
+          .style("visibility", "hidden")
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "1px")
+          .style("border-radius", "5px")
           .style("padding", "10px")
-          .attr("stroke", "#000000")
-          .attr("stroke-width", "1.5")
-          .on('mouseover', function (d, i) {
-            d3.select(this).transition()
-                  .duration('100')
-                  .attr("r", 10);
-            tooltip
-              .html(`${i.Name} (${i.Platform})`)
-              .style("visibility", "visible")
-              .style("left", (event.x) + 15 + "px")
-              .style("top", (event.y) + 15 + "px")
-          })
-          .on('mouseout', function (d, i) {
-            d3.select(this).transition()
-              .duration('200')
-              .attr("r", 5);
-            tooltip
-              .transition()
-              .duration(200)
-              .style("visibility", "hidden")
-          });
 
-    })
+        // Add dots
+        svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .join("circle")
+            .attr("cx", function (d) { return x(+d[xRegion]); } )
+            .attr("cy", function (d) { return y(+d[yRegion]); } )
+            .attr("r", 5)
+            .style("fill", function (d) {return color(d.Genre)})
+            .style("padding", "10px")
+            .attr("stroke", "#000000")
+            .attr("stroke-width", "1.5")
+            .on('mouseover', function (d, i) {
+              d3.select(this).transition()
+                    .duration('100')
+                    .attr("r", 10);
+              tooltip
+                .html(`${i.Name} (${i.Platform})`)
+                .style("visibility", "visible")
+                .style("left", (event.x) + 15 + "px")
+                .style("top", (event.y) + 15 + "px")
+            })
+            .on('mouseout', function (d, i) {
+              d3.select(this).transition()
+                .duration('200')
+                .attr("r", 5);
+              tooltip
+                .transition()
+                .duration(200)
+                .style("visibility", "hidden")
+            });
+
+      })
+    }
   </script>
 </body>
 </html>
