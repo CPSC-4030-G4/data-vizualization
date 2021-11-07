@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-        
-<script src= "https://d3js.org/d3.v7.min.js"></script>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./styles.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <title>Data Visualization</title>
+</head>
 
 <div id="my_dataviz"></div>
 
@@ -85,7 +91,7 @@
     }
     const mousemove = function(event,d) {
       tooltip
-        .html("$" + Math.round(10*sales[`${d['Platform']},${d['Genre']}`])/10 + " million")
+        .html("$" + Math.round(100*sales[`${d['Platform']},${d['Genre']}`])/100 + " million")
         .style("left", (event.x)/2 + "px")
         .style("top", (event.y)/2 + "px")
     }
@@ -135,3 +141,4 @@
           .text("Total sales of a genre on a given platform (in millions)")
   
   </script>
+  </html>
