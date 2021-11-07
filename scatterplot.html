@@ -20,12 +20,12 @@
   <script>
 
     const handleChange = (selection) => {
-      selection = selection.trim()
+      console.log(selection)
       document.getElementById("chart-title").innerHTML = "Comparing Sales By Region"
       var div = d3.select("div");
       div.selectAll("*").remove();
           // set the dimensions and margins of the graph
-      const margin = {top: 40, right: 30, bottom: 30, left: 30},
+      const margin = {top: 40, right: 40, bottom: 40, left: 40},
               width = 1500 - margin.left - margin.right,
               height = 850 - margin.top - margin.bottom;
 
@@ -70,25 +70,19 @@
         svg.append("text").attr("x", width - 40).attr("y", margin.top + 150).text("Misc").style("font-size", "15px").attr("alignment-baseline","middle")
         svg.append("text").attr("x", width - 40).attr("y", margin.top + 165).text("Puzzle").style("font-size", "15px").attr("alignment-baseline","middle")
 
-        console.log(selection)
-        console.log(selection === "NAvsEU")
-        console.log(selection === "JPvsEU")
-
-        if (selection === "NAvsEU") {
-          xRegion = "NA_Sales";
-          yRegion = "EU_Sales";
+        switch(selection) {
+          case 'NAvEU':
+            xRegion = "NA_Sales";
+            yRegion = "EU_Sales";
+            break;
+          case 'JPvEU':
+            xRegion = "JP_Sales";
+            yRegion = "EU_Sales";
+            break;
+          default:
+            xRegion = "NA_Sales";
+            yRegion = "JP_Sales";
         }
-        else if (selection === "JPvsEU") {
-          xRegion = "JP_Sales";
-          yRegion = "EU_Sales";
-        }
-        else {
-          xRegion = "NA_Sales";
-          yRegion = "JP_Sales";
-      }
-
-      console.log(xRegion)
-      console.log(yRegion)
 
         // Add X axis
         const x = d3.scaleLinear()
@@ -102,7 +96,7 @@
         svg.append("text")
             .attr("class", "x label")
             .attr("text-anchor", "end")
-            .attr("x", width / 2)
+            .attr("x", (width + margin.right + margin.left) / 2)
             .attr("y", height + 30)
             .text(function(d) {
               if (selection === "JPvEU") {
@@ -124,8 +118,8 @@
         svg.append("text")
             .attr("class", "y label")
             .attr("text-anchor", "end")
-            .attr("x", -(height) / 2)
-            .attr("y", -30)
+            .attr("x", -(height - margin.top - margin.bottom) / 2)
+            .attr("y", -35)
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)")
             .text(function(d) {
@@ -148,6 +142,9 @@
           .style("border-radius", "5px")
           .style("padding", "10px")
 
+
+        console.log(xRegion)
+        console.log(yRegion)
         // Add dots
         svg.append('g')
             .selectAll("dot")
