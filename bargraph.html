@@ -144,7 +144,7 @@
     const mousemove = function(event,d) {
       console.log(d)
       tooltip
-        .html(`$ ${(+sales_map[d['Platform']] * 100000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`)
+        .html(`$ ${(+sales_map[d['Platform']] * 1000000).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`)
         .style("left", (event.x)/2 + "px")
         .style("top", (event.y)/2 + "px")
         .attr("fill", "black")
