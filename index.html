@@ -19,6 +19,17 @@
     <li>
       <p>Available currently are 3 interactive different visualizations.</p>
     </li>
+    <li>
+      <h4>Helpful links</h4>
+      <ul>
+      <li>
+        <a href="./vgsales.csv" target="_blank">Link to dataset</a>
+      </li>
+      <li>
+        <a href="https://www.kaggle.com/gregorut/videogamesales" target="_blank"> Link to data source</a>
+      </li>
+    </ul>
+    </li>
   </ul>
   <label> <h4>
     Select a visualization to view: 
@@ -27,7 +38,46 @@
   <a href="./bargraph.html"> bargraph </a>
   <a href="./heatmap.html">heatmap </a>
   <a href="./scatterplot.html"> Scatterplot</a>
-  <script src="./script.js"></script>
+  <body>
+  </body>
+  <script>
+var tabulate = function (data,columns) {
+  var table = d3.select('body').append('table')
+	var thead = table.append('thead')
+	var tbody = table.append('tbody')
+
+	thead.append('tr')
+	  .selectAll('th')
+	    .data(columns)
+	    .enter()
+	  .append('th')
+	    .text(function (d) { return d })
+
+	var rows = tbody.selectAll('tr')
+	    .data(data)
+	    .enter()
+	  .append('tr')
+
+	var cells = rows.selectAll('td')
+	    .data(function(row) {
+	    	return columns.map(function (column) {
+	    		return { column: column, value: row[column] }
+	      })
+      })
+      .enter()
+    .append('td')
+      .text(function (d) { return d.value })
+
+  return table;
+}
+
+d3.csv('./vgsales.csv').then((dataset) => {
+	var columns = dataset.columns
+  const data = dataset.slice(0,100)
+  console.log(data)
+  tabulate(data,columns)
+})
+  </script>
   </div>
 </body>
 </html>
