@@ -67,7 +67,8 @@
   
     // Build color scale
     const myColor = d3.scaleSequential()
-      .interpolator(d3.interpolateInferno)
+      //Nintendo: interpolateReds, Microsoft: = interpolateGreens, Sony = interpolateBlues, All: Choose as a group
+      .interpolator(d3.interpolateRdPu) 
       .domain([1,100])
   
     // create a tooltip
@@ -140,7 +141,7 @@
           .style("font-size", "14px")
           .style("fill", "grey")
           .style("max-width", 400)
-          .text("Total sales of a genre on a given platform (in millions)")
+          .text("Global sales of a genre on a given platform (in millions)")
   
   </script>
   </html>
